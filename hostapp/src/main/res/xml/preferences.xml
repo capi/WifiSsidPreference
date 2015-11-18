@@ -3,10 +3,9 @@
 
     <cc.dont_panic.android.wifissidpreference.WifiSsidPreference
         android:key="whitelisted_wifi_ssids"
-        android:title="Allowed WiFi SSIDs"
-        android:summary="Select enabled WiFi networks."
-        android:positiveButtonText="Save"
         android:negativeButtonText="Cancel"
-        />
+        android:positiveButtonText="Save"
+        android:summary="Select enabled WiFi networks."
+        android:title="Allowed WiFi SSIDs" />
 
 </PreferenceScreen>
