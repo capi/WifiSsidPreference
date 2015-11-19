@@ -1,9 +1,12 @@
 package cc.dont_panic.android.wifissidpreference;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
+import android.os.Bundle;
 import android.preference.DialogPreference;
 import android.support.v7.widget.SwitchCompat;
 import android.util.AttributeSet;
@@ -59,6 +62,19 @@ public class WifiSsidPreference extends DialogPreference {
         listAdapter = new WifiListAdapter(getContext(), mConfiguredNetworks);
         listAdapter.setEnabled(!mAllSwitch.isChecked());
         mListWifi.setAdapter(listAdapter);
+        mAllSwitch.setEnabled(mConfiguredNetworks != null);
+
+    }
+
+    @Override
+    protected void showDialog(Bundle state) {
+        super.showDialog(state);
+
+        Dialog dialog = getDialog();
+        if (dialog instanceof AlertDialog) {
+            AlertDialog alert = (AlertDialog) dialog;
+            alert.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(mConfiguredNetworks != null);
+        } // if
     }
 
     @Override

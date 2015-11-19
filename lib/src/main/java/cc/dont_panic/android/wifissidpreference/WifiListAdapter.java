@@ -18,18 +18,20 @@ public class WifiListAdapter extends BaseAdapter {
 
     public WifiListAdapter(Context context, List<WifiConfiguration> wifis) {
         mContext = context;
-        mWifis = new WifiConfiguration[wifis.size()];
-        mWifis = wifis.toArray(mWifis);
+        if (wifis != null) {
+            mWifis = new WifiConfiguration[wifis.size()];
+            mWifis = wifis.toArray(mWifis);
+        } // if
     }
 
     @Override
     public int getCount() {
-        return mWifis.length;
+        return mWifis != null ? mWifis.length : 1;
     }
 
     @Override
     public Object getItem(int position) {
-        return mWifis[position];
+        return mWifis != null ? mWifis[position] : null;
     }
 
     @Override
@@ -39,17 +41,25 @@ public class WifiListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        WifiConfiguration wifi = mWifis[position];
-
-        if (convertView == null) {
+        if (mWifis != null) {
+            WifiConfiguration wifi = mWifis[position];
+            if (convertView == null) {
+                LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = inflater.inflate(android.R.layout.simple_list_item_1, parent, false);
+            } // if
+            TextView textView = (TextView) convertView.findViewById(android.R.id.text1);
+            textView.setText(wifi.SSID);
+            textView.setEnabled(enabled);
+            return convertView;
+        } else {
+            // WiFi is most likely turned off
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(android.R.layout.simple_list_item_1, parent, false);
-        } // if
-        TextView textView = (TextView) convertView.findViewById(android.R.id.text1);
-        textView.setText(wifi.SSID);
-        textView.setEnabled(enabled);
-
-        return convertView;
+            TextView textView = (TextView) convertView.findViewById(android.R.id.text1);
+            textView.setText("Please turn on WiFi to select networks.");
+            textView.setEnabled(false);
+            return convertView;
+        } // if/else
     }
 
     public void setEnabled(boolean enabled) {
