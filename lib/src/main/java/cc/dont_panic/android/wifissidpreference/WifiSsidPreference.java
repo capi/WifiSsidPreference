@@ -50,16 +50,17 @@ public class WifiSsidPreference extends DialogPreference {
     protected void onBindDialogView(View view) {
         super.onBindDialogView(view);
 
+        Set<String> ssids = null;
         if (isPersistent()) {
             String key = getKey();
             boolean exists = getSharedPreferences().contains(key);
-            Set<String> ssids = getSharedPreferences().getStringSet(key, null);
+            ssids = getSharedPreferences().getStringSet(key, null);
             mAllSwitch.setChecked(ssids == null);
         } // if
 
         WifiManager wifiManager = (WifiManager) view.getContext().getSystemService(Context.WIFI_SERVICE);
         mConfiguredNetworks = wifiManager.getConfiguredNetworks();
-        listAdapter = new WifiListAdapter(getContext(), mConfiguredNetworks);
+        listAdapter = new WifiListAdapter(getContext(), mConfiguredNetworks, ssids);
         listAdapter.setEnabled(!mAllSwitch.isChecked());
         mListWifi.setAdapter(listAdapter);
         mAllSwitch.setEnabled(mConfiguredNetworks != null);
@@ -88,6 +89,7 @@ public class WifiSsidPreference extends DialogPreference {
                 editor.remove(key);
             } else {
                 Set<String> ssids = new HashSet<>();
+                ssids.addAll(listAdapter.getSelectedWifiSSIDs());
                 editor.putStringSet(key, ssids);
             } // if/else
             if (shouldCommit()) {
