@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">WifiSsidPreference</string>
+    <string name="allow_all_wifi_networks">All WiFi networks</string>
+    <string name="turn_on_wifi">Please turn on WiFi to select networks.</string>
 </resources>
